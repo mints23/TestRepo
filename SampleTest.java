@@ -1,15 +1,27 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.OptionalInt;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 
 public class SampleTest {
 	
@@ -32,18 +44,37 @@ class Node{
 
 
 	public static void main(String[] args) {
-		String st=null;
-		System.out.println(st);
+		
+
+		Map<String, Integer> unsortMap = new HashMap<>();
+        unsortMap.put("z", 10);
+        unsortMap.put("b", 5);
+        unsortMap.put("a", 6);
+        unsortMap.put("c", 20);
+		
+        Map<String, Integer> result2 = unsortMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+		System.out.println(result2);
+
 		
 		
-			//Java 8 comparator
-		List<Node> nodes = new ArrayList();
-				
-				
+		
+		List<Node> nodes = new ArrayList();		
+
+		//Java 8 comparator
 		nodes.sort(Comparator.comparing(Node::getValue)
                 .thenComparing(Node::getName));
 		
-		StringBuilder sb = new StringBuilder("CompileOnline");
+		
+		
+		
+		
+		/*
+		 * An empty StringBuilder class contains the default 16 character capacity. If
+		 * the number of the character increases from its current capacity, it increases
+		 * the capacity by (oldcapacity*2)+2.
+		 */		StringBuilder sb = new StringBuilder("CompileOnline");
 		System.out.println(sb.capacity());
 		sb= new StringBuilder(" ");
 		System.out.println(sb.capacity());
@@ -53,17 +84,92 @@ class Node{
 		
 		char[] ch= ll.toCharArray();
 		
+		
+		
+		
+		
+		
+		int[] numbers = {1,2,3,4,5,6,7,8,9, 11,12}; 
+		
+		
+		//Sum Average
+        OptionalDouble avg = Arrays.stream(numbers).average();
+        int sum = Arrays.stream(numbers).sum();
+
+        
+        
+        
 	
+		//The skip(n) method is an intermediate operation that discards the first n elements of a stream. 
+		//The n parameter can't be negative, and if it's higher than the size of the stream, skip() returns an empty stream.
+
+
 		
+
 	
-		System.out.println("0123456789ABCDEF".charAt(15%16));
-		
-		
+		System.out.println("0123456789ABCDEF".charAt(15%16));		
 		System.out.println(Integer.parseInt("F", 16)+" "+Integer.toHexString(15));
 
 		
 		List<String> words = Arrays.asList("GFG", "Geeks", "for", 
-                "GeeksQuiz", "GeeksforGeeks"); 
+                "GeeksQuiz", "GeeksforGeeks","GFG","Geeks","Geeks"); 
+		
+		
+		
+		//Frequency > 1
+		Set<String> collect  = words.stream()
+		        .filter(word -> Collections.frequency(words, word) > 1)
+		        .collect(Collectors.toSet());		
+		System.out.println(collect);
+
+		
+		
+		
+		//Limit 9
+		Set<String> collectLimit  = words.stream()
+		        .filter(word -> Collections.frequency(words, word) > 1).limit(9)
+		        .collect(Collectors.toSet());
+		
+		
+		//Custom comparator
+		Map<Node,Node> mp = new TreeMap<Node, Node>(new Comparator<Node>() {
+
+			@Override
+			public int compare(Node arg0, Node arg1) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+		});
+		
+		Queue<Node> pq = new PriorityQueue(new Comparator<Node>() {
+
+			@Override
+			public int compare(Node o1, Node o2) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+		}
+		);
+		//Grouping By
+        Map<String, Long> result =
+        			words.parallelStream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+        Map<String, Long> finalMap = new LinkedHashMap<>();
+        
+        Set<Entry<String, Long>> es=result.entrySet();
+        Set<String> ks=result.keySet();
+       result.put("jh", result.getOrDefault("h", (long) 545));    
+        Iterator it=es.iterator();
+        
+        while(it.hasNext()) {
+        	it.next();
+        }
+
+        //Sorting Map
+		result.entrySet().stream()
+        .sorted(Map.Entry.<String, Long>comparingByValue()
+                .reversed()).forEachOrdered(e -> finalMap.put(e.getKey(), e.getValue()));
 		
 		String[] str1 = {"abc", "", "bcd", "", "defg", "jk"};
 		List<String> test=Arrays.asList(str1);
@@ -83,6 +189,8 @@ class Node{
 
 		OptionalInt result1=intList.stream().mapToInt(k->k*10).min();
 		System.out.println(		result1.getAsInt());
+		
+		System.out.println(	("a"+"b") == "ab" ) ;
 
 		////Predicate////////////////////////
 		long count = strList.stream().filter(x -> x.startsWith("a")).count();
